@@ -1,6 +1,7 @@
 package com.sean.blog.ui.auth
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -11,7 +12,7 @@ import com.sean.blog.R
 /**
  * A simple [Fragment] subclass.
  */
-class RegisterFragment : Fragment() {
+class RegisterFragment : BaseAuthFragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -19,6 +20,12 @@ class RegisterFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_register, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        Log.d(TAG, "RegisterFragment : ${viewModel.hashCode()}")
     }
 
 }
