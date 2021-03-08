@@ -8,6 +8,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.sean.blog.R
 import com.sean.blog.ui.BaseActivity
+import com.sean.blog.ui.ResponseType
 import com.sean.blog.ui.auth.state.AuthViewState
 import com.sean.blog.ui.main.MainActivity
 import com.sean.blog.viewmodel.ViewModelProviderFactory
@@ -30,10 +31,40 @@ class AuthActivity : BaseActivity() {
     }
 
     fun subscribeObservers() {
+        Log.d("aaabbb", "auth activity")
+        viewModel.dataState.observe(this, Observer { dataState ->
+            dataState.data?.let { data ->
+                data.data?.let { event ->
+                    event.getContentIfNotHandled()?.let {
+                        it.authToken?.let {
+                            Log.d(TAG, "AuthActivity, DataState: ${it}")
+                            viewModel.setAuthToken(it)
+                        }
+                    }
+                }
+
+                data.response?.let { event ->
+                    event.getContentIfNotHandled()?.let {
+                        when(it.responseType) {
+                            is ResponseType.Dialog -> {
+                                //inflate error dialog
+                            }
+
+                            is ResponseType.Toast -> {
+
+                            }
+
+                            is ResponseType.None -> {
+                                Log.d(TAG, "AuthActivity, Response: ${it.message}")
+                            }
+                        }
+                    }
+                }
+            }
+        })
 
         viewModel.viewState.observe(this, Observer {
             it.authToken?.let {
-                Log.d("abcabc", "uhuhuhuuhuh")
                 sessionManager.login(it)
             }
         })

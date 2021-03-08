@@ -11,6 +11,7 @@ import androidx.lifecycle.Observer
 
 import com.sean.blog.R
 import com.sean.blog.model.AuthToken
+import com.sean.blog.ui.auth.state.AuthStateEvent
 import com.sean.blog.ui.auth.state.LoginData
 import com.sean.blog.util.GenericApiResponse
 import com.sean.blog.util.GenericApiResponse.*
@@ -36,12 +37,7 @@ class LoginFragment : BaseAuthFragment() {
         subscribeObservers()
 
         login_button.setOnClickListener {
-            viewModel.setAuthToken(
-                AuthToken(
-                    1,
-                    "sadfghjdgdfgdfgdfgdfgdfgd"
-                )
-            )
+            login()
         }
 
         /*
@@ -70,6 +66,16 @@ class LoginFragment : BaseAuthFragment() {
                 loginData.login_password?.let { input_password.setText(it) }
             }
         })
+    }
+
+    fun login() {
+        Log.d("aaabbb", "login fragment 1")
+        viewModel.setStateEvent(
+            AuthStateEvent.LoginAttempEvent(
+                input_email.text.toString(),
+                input_password.text.toString()
+            )
+        )
     }
 
     override fun onDestroyView() {

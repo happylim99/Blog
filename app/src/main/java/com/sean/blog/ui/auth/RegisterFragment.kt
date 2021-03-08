@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 
 import com.sean.blog.R
+import com.sean.blog.ui.auth.state.AuthStateEvent
 import com.sean.blog.ui.auth.state.RegistrationData
 import com.sean.blog.util.GenericApiResponse
 import com.sean.blog.util.GenericApiResponse.*
@@ -30,6 +31,10 @@ class RegisterFragment : BaseAuthFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Log.d(TAG, "RegisterFragment : ${viewModel.hashCode()}")
+
+        register_button.setOnClickListener {
+            register()
+        }
 
         subscribeObservers()
 
@@ -61,6 +66,17 @@ class RegisterFragment : BaseAuthFragment() {
                 registrationData.registration_confirm_password?.let { input_password_confirm.setText(it) }
             }
         })
+    }
+
+    fun register() {
+        viewModel.setStateEvent(
+            AuthStateEvent.RegisterAttemptEvent(
+                input_email.text.toString(),
+                input_username.text.toString(),
+                input_password.text.toString(),
+                input_password_confirm.text.toString()
+            )
+        )
     }
 
     override fun onDestroyView() {
